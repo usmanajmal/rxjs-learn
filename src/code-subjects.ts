@@ -1,5 +1,6 @@
 import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ReplaySubject } from "rxjs/ReplaySubject";
 
 // Subject is just another type of Observables. More specifically, it can emit values as well
 // as act as an observer i.e. its an Observable and an Observer simultaneously.
@@ -53,6 +54,34 @@ bSubject.next("Second item sent");
 bSubject.next("Third item sent");
 
 bObserver2.unsubscribe();
+
+
+// Replay Subject
+// ----------------------------------------------------------------------------------------------------
+// Replay subject is a special type of subject that gets n last emitted values. You pass n in arguments
+
+var rSubject = new ReplaySubject(3);
+
+rSubject.subscribe(
+  (data) => addItem("RObserver 1: " + data),
+  (err) => addItem(err),
+  () => addItem('RObserver 1 completed')
+);
+
+rSubject.next("1st item sent")
+rSubject.next("2nd item sent")
+rSubject.next("3rd item sent")
+rSubject.next("4th item sent")
+rSubject.next("..| RObserver 2 is about to fire |..");
+
+var rObserver2 = rSubject.subscribe(
+  (data) => addItem('RObserver 2: ' + data)
+);
+
+rSubject.next("5th item sent");
+rSubject.next("6th item sent");
+
+rObserver2.unsubscribe();
 
 /**
  * Add a value to DOM

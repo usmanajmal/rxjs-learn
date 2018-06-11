@@ -2,6 +2,9 @@ import { Observable } from 'rxjs/Observable';
 import { merge } from "rxjs/observable/merge";
 import "rxjs/add/operator/map";
 
+import { from } from 'rxjs/Observable/from';
+import "rxjs/add/operator/pluck";
+
 // Operators act on observables or subjects and return a new observable. They don't change
 // the observables on which they are called. That is why they are regarded as Pure Functions
 // as they do not change variables outside of their own scope
@@ -50,3 +53,14 @@ function addItem(value: any) {
   document.getElementById("output").appendChild(node);
 }
 
+
+// Pluck Operator (and observable created via 'from')
+// ---------------------------------------------------------------------------------------------
+
+from([
+  { 'firstName': 'Usman', 'lastName': 'Ajmal', 'Age': 32},
+  { 'firstName': 'Mike', 'lastName': 'Kite', 'Age': 32},
+  { 'firstName': 'Ali', 'lastName': 'Usman', 'Age': 32}
+])
+  .pluck('firstName')
+  .subscribe((x: any) => addItem(x));

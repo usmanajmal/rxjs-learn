@@ -1,6 +1,7 @@
 import { Subject } from "rxjs/Subject";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ReplaySubject } from "rxjs/ReplaySubject";
+import { AsyncSubject } from "rxjs/AsyncSubject";
 
 // Subject is just another type of Observables. More specifically, it can emit values as well
 // as act as an observer i.e. its an Observable and an Observer simultaneously.
@@ -114,6 +115,36 @@ setTimeout(() => {
     }
   );
 }, 500);
+
+// Async Subject (with second argument)
+// ------------------------------------------------------------------------------------------------
+// Async subject emits last value only when subject completes
+
+var aSubject = new AsyncSubject();
+
+aSubject.subscribe(
+  (data) => addItem("AsyncSubject - Observer 1: " + data),
+  (err) => addItem(err),
+  () => addItem('AsyncSubject - Observer 1 completed')
+);
+
+setTimeout(() => {
+  aSubject.next("AsyncSubject - 1st item is sent")
+  aSubject.next("AsyncSubject - 2nd item is sent")
+  aSubject.next("AsyncSubject - 3rd item is sent")
+
+  var aObserver2 = aSubject.subscribe(
+    (data) => {
+      addItem('AsyncSubject - Observer 2: ' + data);
+    }
+  );
+
+  aSubject.next("AsyncSubject - 4th item is sent")
+  aSubject.next("AsyncSubject - 5th item is sent")
+
+  aSubject.complete();
+}, 1000);
+
 
 /**
  * Add a value to DOM

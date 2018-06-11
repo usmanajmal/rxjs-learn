@@ -1,6 +1,20 @@
 import { Observable } from 'rxjs/Observable';
 import { merge } from "rxjs/observable/merge";
+import "rxjs/add/operator/map";
 
+// Operators act on observables or subjects and return a new observable. They don't change
+// the observables on which they are called. That is why they are regarded as Pure Functions
+// as they do not change variables outside of their own scope
+//
+// There are two types of Operators:
+//
+// 1. Instance Operators:
+//      Accounts for majority of RxJS operators. They are called on instances of observables
+// 2. Static Operators:
+//      Usually used to create observables
+
+// Merge Operator
+// ---------------------------------------------------------------------------------------------
 var observable1 = Observable.create((observer: any) => {
   observer.next("Hey guys...");
 });
@@ -13,6 +27,15 @@ var newObserver = merge(observable1, observable2);
 newObserver.subscribe(
   (x) => addItem(x)
 );
+
+
+// Map Operator
+// ---------------------------------------------------------------------------------------------
+Observable.create((observer: any) => {
+  observer.next("I am in lower case guys...(but a map operator may transform me)");
+})
+  .map((x: any) => x.toUpperCase())
+  .subscribe((x: any) => addItem(x));
 
 
 /**
